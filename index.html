@@ -25,7 +25,6 @@
 
     function Page() {
         const [state, setState] = React.useState(initialState());
-        console.log(state);
 
         if(state.started) {
             return <Clock {...state}/>
@@ -72,7 +71,6 @@
     }
 
     function NewPlayer(props) {
-        console.log(props);
         return <div><button type="button" className="btn btn-outline-primary" style={{
             margin: "3px",
             color: props.color2,
@@ -163,7 +161,6 @@
         }
 
         function makeActive(player) {
-            console.log("make active", player)
             if(!active || player !== active.player) {
 
                 if(active) {
@@ -182,13 +179,12 @@
         let buttonWidth = window.innerWidth - 10;
 
         return <div> 
-            {state.players.map(p=><Player name={p.name} active={active && active.player == p} color={p.color} color2={p.color2} time={playerTimeRemaining(p)} height={buttonHeight} width={buttonWidth} onClick={()=>makeActive(p)}/>)} 
+            {state.players.map(p=><Player name={p.name} active={active && active.player == p} color={p.color} color2={p.color2} time={playerTimeRemaining(p)} taken={p.time + (active && active.player == p ? additionalActivePlayerTime : 0 ) } height={buttonHeight} width={buttonWidth} onClick={()=>makeActive(p)}/>)} 
                 <Button text="none" active={false} color="gray" color2="white" time={0} height={buttonHeight} width={buttonWidth} onClick={()=>makeActive(undefined)}/>
             </div>
     }
 
     function Button(props) {
-        console.log(props);
         return <div><button type="button" className="btn btn-outline-primary" disabled={props.disabled} style={{
             margin: "3px",
             width: props.width,
@@ -200,7 +196,7 @@
     }
 
     function Player(props) {
-        return <Button name={props.name} active={props.active} color={props.color} color2={props.color2} disabled={props.time < 0} height={props.height} width={props.width} onClick={props.onClick} text={props.name + " - " + format(props.time)}></Button>
+        return <Button name={props.name} active={props.active} color={props.color} color2={props.color2} disabled={props.time < 0} height={props.height} width={props.width} onClick={props.onClick} text={props.name + " - " + format(props.taken) + "/" + format(props.time)}></Button>
     }
 
     function format(totalMs) {
